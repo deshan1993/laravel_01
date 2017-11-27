@@ -1,45 +1,44 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Author;
+use App\Keyword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Validation\Rule;
 use Validator;
 
-class AuthorController extends Controller
+class KeywordController extends Controller
 {
-    //insert author
-    public function insertAuthor(Request $request){
+    //insert keywords
+    public function insertKeyword(Request $request){
       $validator = Validator::make($request->all(), [
         'name' => 'required'
       ]);
-
       if($validator->fails()){
         return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $table = new Author();
+        $table = new Keyword();
         $table->name = $request->input('name');
         $table->save();
         if($table->save()){
-          return response()->json("Inserted successfully");
+          return response()->json("Sucessfully added a keyword");
         }
         else{
-          return response()->json("Error occured");
+          return response()->json("There is an error");
         }
       }
     }
 
-    //view author
-    public function viewAuthor(){
-      $table = new Author();
-      $data = DB::table('authors')->pluck('name');
+    //view keywords
+    public function viewKeyword(){
+      $table = new Keyword();
+      $data = DB::table('keywords')->pluck('name');
       return response()->json($data);
     }
 
-    //update author details
-    public function updateAuthor(Request $request){
+    //update keywords
+    public function updateKeyword(Request $request){
       $validator = Validator::make($request->all(), [
         'id' => 'required',
         'name' => 'required'
@@ -48,30 +47,27 @@ class AuthorController extends Controller
         return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $id = $request->input('id');
         $update = ['name' => $request->input('name')];
-        $data = DB::table('authors')->whereIn('id', [$id])->update($update);
+        $data = DB::table('keywords')->whereIn('id', [$request->input('id')])->update($update);
         if($data){
-          return response()->json("Successfully updated");
+          return response()->json("Updated successfully");
         }
         else{
-          return reponse()->json("There is an error");
+          return response()->json("There is an error");
         }
       }
     }
 
-    //delete authors
-    public function deleteAuthor(Request $request){
+    //delete keywords
+    public function deleteKeyword(Request $request){
       $validator = Validator::make($request->all(), [
         'id' => 'required'
       ]);
       if($validator->fails()){
-        return response()->json(['error'=>$request->errors()], 401);
+        return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $id = $request->input('id');
-        $data = DB::table('authors')->whereIn('id', [$id])->delete();
-
+        $data = DB::table('keywords')->where('id', [$request->input('id')])->delete();
         if($data){
           return response()->json("Successfully deleted");
         }

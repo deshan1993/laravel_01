@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Modules;
+use App\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Validation\Rule;
 use Validator;
 
-class modulesController extends Controller
+class ModuleController extends Controller
 {
     //insert module data
     public function addModule(Request $request){
@@ -19,7 +19,7 @@ class modulesController extends Controller
         return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $table = new Modules();
+        $table = new Module();
         $table->module_name = $request->moduleName;
         $table->save();
 
@@ -39,7 +39,7 @@ class modulesController extends Controller
     }
 
     //edit module
-    public function editModule(Request $request){
+    public function updateModule(Request $request){
       $validator = Validator::make($request->all(), [
         'id' => 'required',
         'moduleName' => 'required'
@@ -53,7 +53,7 @@ class modulesController extends Controller
         $update = ['module_name' => $request->input('moduleName')];
         $data = DB::table('modules')->whereIn('id', [$id])->update($update);
 
-        if(count($data)){
+        if($data){
           return response()->json("Successfully updated");
         }
         else{
@@ -77,7 +77,7 @@ class modulesController extends Controller
         if(count($data1)>0){
           $data = DB::table('modules')->WHERE('id', $id)->delete();
 
-          if(count($data)){
+          if($data){
             return response()->json("Successfully deleted");
           }
           else{
@@ -85,7 +85,7 @@ class modulesController extends Controller
           }
         }
         else{
-          return "Entered id can't be found";
+          return response()->json("Entered id can't be found");
         }
 
       }

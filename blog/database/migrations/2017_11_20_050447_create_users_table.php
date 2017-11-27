@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password');
             $table->boolean('status')->default(0);
-            $table->boolean('delete_col')->default(0);
+            $table->boolean('deleted')->default(0);
             $table->timestamps();
         });
     }

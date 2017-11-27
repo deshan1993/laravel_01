@@ -44,7 +44,7 @@ class UserController extends Controller
     //get all availabe users' details
     public function getUserDetails(){
 
-      $data = DB::table('Users')->where('delete_col', [0])->pluck('name');
+      $data = DB::table('Users')->where('deleted', [0])->pluck('name');
       return response()->json($data);
 
     }
@@ -99,7 +99,7 @@ class UserController extends Controller
 
       else{
         $name = $request->input('name');
-        $data = DB::select('SELECT name,email,password FROM Users WHERE name=:name AND delete_col=:del', ['name'=>$name, 'del'=>0]);
+        $data = DB::select('SELECT name,email,password FROM Users WHERE name=:name AND deleted=:del', ['name'=>$name, 'del'=>0]);
         if(count($data)){
           return response()->json($data);
         }
@@ -119,7 +119,7 @@ class UserController extends Controller
         return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $update = ['delete_col'=>1];
+        $update = ['deleted'=>1];
         $name = $request->input('name');
         $data = DB::table('Users')->whereIn('name', [$name])->update($update);
 

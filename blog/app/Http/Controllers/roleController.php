@@ -1,18 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\role;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Validation\Rule;
 use Validator;
 
-class roleController extends Controller
+class RoleController extends Controller
 {
 
     //function for insert roles
     public function insertRole(Request $request){
-      $table = new role();
+      $table = new Role();
 
       $validator = Validator::make($request->all(), [
            'name' => 'required'
@@ -59,7 +59,7 @@ class roleController extends Controller
         return response()->json(['error'=>$validator->errors()], 401);
       }
       else{
-        $table = new role();
+        $table = new Role();
 
         $update = [
           'name' => $replaceName
